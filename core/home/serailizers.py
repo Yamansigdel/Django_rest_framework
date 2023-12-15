@@ -12,4 +12,10 @@ class StudentSerializer(serializers.ModelSerializer):
         if data['age'] <18:
             raise serializers.ValidationError({'error': 'age cannot be less than 18'})
         
+        if data['name']:
+            for n in data['name']:
+                if n.isdigit():
+                    raise serializers.ValidationError({'error': 'name can only contains letters'})
+
+
         return data

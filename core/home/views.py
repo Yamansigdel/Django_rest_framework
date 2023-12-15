@@ -13,10 +13,9 @@ def home(request):
 
 @api_view(['POST'])
 def post_student(request):
-    if request.data['age'] < 18:
-         return Response({'status': 403 ,'message':'Age must be greater than 18'})
 
     serializer=StudentSerializer(data=request.data)
+    
     if not serializer.is_valid():
         return Response({'status': 403 ,'message':'something went wrong'})
     
