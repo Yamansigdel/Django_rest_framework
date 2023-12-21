@@ -21,3 +21,32 @@ def post_student(request):
     
     serializer.save()
     return Response({'status':200, 'payload': serializer.data,'message':'you send'})
+
+@api_view(['PATCH'])
+def update_student(request, id):
+    try:
+        student_objs = Student.objects.get(id=id)
+
+        serializer = StudentSerializer(student_objs, data=request.data, partial=True)
+
+        if not serializer.is_valid():
+            return Response({'status': 400, 'error': serializer.errors})
+
+        serializer.save()
+        return Response({'status': 200, 'payload': serializer.data, 'message': 'Update successful'})
+    except Student.DoesNotExist:
+        return Response({'status': 404, 'message': 'Student not found'})
+    except Exception as e:
+        return Response({'status': 500, 'message': str(e)})
+    
+@api_view(['DELETE'])
+def delete_student(request, id):
+    try:
+        student_objs = Student.objects.get(id=id)
+        student_objs.delete()
+        return Response({'status':203,'message': 'deleted'})
+
+    except Exception as e:
+        print(e)
+        return Response({'status':403,'message': 'invalid id'})
+    
