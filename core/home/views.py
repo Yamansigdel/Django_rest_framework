@@ -20,7 +20,7 @@ def post_student(request):
         return Response({'status': 403 ,'error':serializer.errors})
     
     serializer.save()
-    return Response({'status':200, 'payload': serializer.data,'message':'you send'})
+    return Response({'status':200, 'payload': serializer.data,'message':'your data is saved'})
 
 @api_view(['PATCH'])
 def update_student(request, id):
