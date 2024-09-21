@@ -7,7 +7,6 @@ from .serailizers import *
 from rest_framework.views import APIView
 
 
-
 @api_view(['GET'])
 def get_book(request):
     book_objs=Book.objects.all()
@@ -17,7 +16,7 @@ def get_book(request):
 
 
 
-def StudentAPI(APIView):
+class StudentAPI(APIView):
 
     def get (self, request):
         student_objs=Student.objects.all()
@@ -25,16 +24,59 @@ def StudentAPI(APIView):
         return Response({'status': 200, 'payload': serializer.data})
 
     def post (self, request):
-        pass
+
+        serializer=StudentSerializer(data=request.data)
+
+        if not serializer.is_valid():
+            return Response({'status': 403 ,'error':serializer.errors})
+        
+        serializer.save()
+        return Response({'status':200, 'payload': serializer.data,'message':'your data is saved'})
+    
 
     def put (self, request):
-        pass
+
+        try:
+            student_objs = Student.objects.get(id=request.data['id'])
+
+            serializer = StudentSerializer(student_objs, data=request.data)
+
+            if not serializer.is_valid():
+                return Response({'status': 400, 'error': serializer.errors})
+
+            serializer.save()
+            return Response({'status': 200, 'payload': serializer.data, 'message': 'Update successful'})
+        except Student.DoesNotExist:
+            return Response({'status': 404, 'message': 'Student not found'})
+        except Exception as e:
+            return Response({'status': 500, 'message': str(e)})
 
     def patch (self, request):
-        pass
+ 
+        try:
+            student_objs = Student.objects.get(id=request.data['id'])
+
+            serializer = StudentSerializer(student_objs, data=request.data, partial=True)
+
+            if not serializer.is_valid():
+                return Response({'status': 400, 'error': serializer.errors})
+
+            serializer.save()
+            return Response({'status': 200, 'payload': serializer.data, 'message': 'Update successful'})
+        except Student.DoesNotExist:
+            return Response({'status': 404, 'message': 'Student not found'})
+        except Exception as e:
+            return Response({'status': 500, 'message': str(e)})       
 
     def delete (self, request):
-        pass
+        try:
+            student_objs = Student.objects.get(id=request.data['id'])
+            student_objs.delete()
+            return Response({'status':203,'message': 'deleted'})
+
+        except Exception as e:
+            print(e)
+            return Response({'status':403,'message': 'invalid id'})
 
 
 
