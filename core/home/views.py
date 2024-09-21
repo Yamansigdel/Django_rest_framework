@@ -22,12 +22,12 @@ def post_student(request):
     serializer.save()
     return Response({'status':200, 'payload': serializer.data,'message':'your data is saved'})
 
-@api_view(['PATCH'])
+@api_view(['PUT'])
 def update_student(request, id):
     try:
         student_objs = Student.objects.get(id=id)
 
-        serializer = StudentSerializer(student_objs, data=request.data, partial=True)
+        serializer = StudentSerializer(student_objs, data=request.data)
 
         if not serializer.is_valid():
             return Response({'status': 400, 'error': serializer.errors})
