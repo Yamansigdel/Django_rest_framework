@@ -19,3 +19,16 @@ class StudentSerializer(serializers.ModelSerializer):
 
 
         return data
+
+
+class CategorySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Category
+        fields ='__all__'
+
+
+class BookSerializer(serializers.ModelSerializer):
+    category=CategorySerializer() #Obtains all the foreign key from Category
+    class Meta:
+        model = Book
+        fields ='__all__'
