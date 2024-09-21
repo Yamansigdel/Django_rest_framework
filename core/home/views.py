@@ -5,6 +5,18 @@ from rest_framework.response import Response
 from .models import *
 from .serailizers import * 
 
+
+
+
+@api_view(['GET'])
+def get_book(request):
+    book_objs=Book.objects.all()
+    serializer=BookSerializer(book_objs,many=True)  
+    return Response({'status': 200, 'payload': serializer.data})
+
+
+
+
 @api_view(['GET'])
 def home(request):
     student_objs=Student.objects.all()

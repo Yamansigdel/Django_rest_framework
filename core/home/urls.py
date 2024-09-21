@@ -8,4 +8,6 @@ urlpatterns = [
    path('student/', post_student),
    path('update-student/<id>/',update_student),
    path('delete-student/<id>/',delete_student),
+    path('get-book/',get_book),
 ]
+
