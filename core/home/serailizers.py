@@ -24,7 +24,7 @@ class StudentSerializer(serializers.ModelSerializer):
 class CategorySerializer(serializers.ModelSerializer):
     class Meta:
         model = Category
-        fields ='__all__'
+        fields =['category_name',]
 
 
 class BookSerializer(serializers.ModelSerializer):
