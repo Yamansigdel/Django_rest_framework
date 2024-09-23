@@ -174,6 +174,12 @@ class StudentAPI(APIView):
 from rest_framework import generics
 
 
-class StudentGeneric(generics.ListAPIView):
+class StudentGeneric(generics.ListAPIView,generics.CreateAPIView):
     queryset = Student.objects.all()
     serializer_class = StudentSerializer
+
+
+class StudentGeneric1(generics.UpdateAPIView,generics.DestroyAPIView):
+    queryset = Student.objects.all()
+    serializer_class = StudentSerializer
+    lookup_field='id'
