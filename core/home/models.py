@@ -15,3 +15,7 @@ class Student(models.Model):
     name=models.CharField(max_length=100)
     age=models.IntegerField(default=18)
     father_name=models.CharField(max_length=100)
+
+
+class ExcelFileUpload(models.Model):
+    excel_file_upload=models.FileField(upload_to="excel")

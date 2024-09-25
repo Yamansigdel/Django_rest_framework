@@ -13,8 +13,11 @@ class CategoryAdmin(admin.ModelAdmin):
 class BookAdmin(admin.ModelAdmin):
     list_display=('book_title','category')
 
+class ExcelFileUploadAdmin(admin.ModelAdmin):
+    list_display=('excel_file_upload',)
 
 
 admin.site.register(Student,StudentAdmin)
 admin.site.register(Book,BookAdmin)
 admin.site.register(Category,CategoryAdmin)
+admin.site.register(ExcelFileUpload,ExcelFileUploadAdmin)

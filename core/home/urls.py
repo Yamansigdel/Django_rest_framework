@@ -5,7 +5,8 @@ from .views import *
 
 urlpatterns = [
     
-
+   path('excel/',ExportImportExcel.as_view()),
+   path('pdf/', GeneratePdf.as_view(),name='generate_pdf'),
    path('generic-student/', StudentGeneric.as_view()),
    path('generic-student/<id>', StudentGeneric1.as_view()),
    path('student/',StudentAPI.as_view()),

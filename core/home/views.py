@@ -183,3 +183,55 @@ class StudentGeneric1(generics.UpdateAPIView,generics.DestroyAPIView):
     queryset = Student.objects.all()
     serializer_class = StudentSerializer
     lookup_field='id'
+
+
+from .helpers import save_pdf
+import datetime
+
+class GeneratePdf(APIView):
+    def get(self, request):
+            student_objs=Student.objects.all()
+            params ={
+                'today': datetime.date.today(),
+                'student_objs': student_objs
+            }
+            file_name, status = save_pdf(params)
+            print(status)
+
+
+            if not status: 
+                return Response({'status': 400})
+
+
+            return Response({'status': 200, 'path' :  f'\media\{file_name}.pdf'})
+    
+import pandas as pd
+from django.conf import settings
+import uuid
+
+class ExportImportExcel(APIView):
+    def get(self,request):
+        student_objs=Student.objects.all()
+        serializer=StudentSerializer(student_objs,many=True)
+        df=pd.DataFrame(serializer.data)
+        df.to_csv(f"public/static/excel/{uuid.uuid4()}.csv", encoding="UTF-8",index=False)
+        print(df)
+
+        return Response({'status': 200})
+
+    def post(self,request):
+        #exceled_upload_obj=ExcelFileUpload.objects.create(excel_file_upload=request.FILES['files']) #relative path of file
+        #df= pd.read_csv(f"{settings.BASEDIR}/public/static/{exceled_upload_obj.excel_file_upload}") #concatenated with base dir
+        exceled_upload_obj=ExcelFileUpload.objects.first()
+        file_path = exceled_upload_obj.excel_file_upload.path #(alternative)(fullpath)
+        df=pd.read_csv(file_path)
+        print(df)
+        for student in(df.values.tolist()):
+            Student.objects.create(
+                name=student[1],
+                age=student[2],
+                father_name=student[3]
+            )
+
+
+        return Response({'status': 200})
